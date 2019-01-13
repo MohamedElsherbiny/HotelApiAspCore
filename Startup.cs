@@ -31,12 +31,16 @@ namespace HotelApp.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var DefaultConnection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(option =>
             {
-                option.UseSqlite(connectionString);
+                option.UseSqlite(DefaultConnection);
             });
-            services.AddTransient<IAuthRepository, AuthRepository>();
+            var HotelConnection = Configuration.GetConnectionString("HotelConnection");
+            services.AddDbContext<HotelDbContext>(option =>
+            {
+                option.UseSqlite(HotelConnection);
+            });
 
             services.AddIdentity<User, IdentityRole>(op =>
             {
@@ -45,9 +49,12 @@ namespace HotelApp.Api
                 op.Password.RequireNonAlphanumeric = false;
                 op.Password.RequireUppercase = false;
                 op.User.RequireUniqueEmail = true;
-            })
-                .AddEntityFrameworkStores<AppDbContext>()
+
+            }).AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddTransient<IHotelRepository, HotelRepository>();
 
             services.AddAutoMapper();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
@@ -68,12 +75,12 @@ namespace HotelApp.Api
                 app.UseHsts();
             }
             app.UseCors(option =>
-                        {
-                            option.AllowAnyHeader()
-                                .AllowAnyMethod()
-                                .AllowAnyOrigin()
-                                .AllowCredentials();
-                        });
+            {
+                option.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowCredentials();
+            });
             // app.UseHttpsRedirection();
             app.UseMvc();
         }

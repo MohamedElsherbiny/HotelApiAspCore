@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Hotel.Api.Migrations
+namespace HotelApp.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190102121440_IdentityMirgraion")]

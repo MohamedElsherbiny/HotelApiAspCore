@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Hotel.Api.Migrations
+namespace HotelApp.Api.Migrations
 {
     public partial class IdentityMirgraion : Migration
     {
